@@ -1,22 +1,14 @@
-Jenkinsfile (Declarative Pipeline)
 pipeline {
-    agent any
-
-    stages {
-        stage('Build') {
+        agent none
+        stages {
+         
+          stage("build & SonarQube Scanner") {
+            agent any
             steps {
-                echo 'Building..'
+              withSonarQubeEnv('SonarQube Scanner') {
+                sh 'mvn clean package sonar:sonar'
+              }
             }
+          }
         }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
-            }
-        }
-    }
-}
+      }
