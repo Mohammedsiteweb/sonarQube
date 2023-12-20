@@ -1,17 +1,11 @@
-pipeline {
-    agent none
-    stages {
-        stage("Build & SonarQube Scanner") {
-            agent {
-                label 'sonar'
-            }
-            steps {
-                withSonarQubeEnv('SonarQube') {
-                    script {
-                        bat 'mvn clean package sonar:sonar'
-                    }
-                }
-            }
-        }
+node {
+  stage('SCM') {
+    checkout scm
+  }
+  stage('SonarQube Analysis') {
+    def scannerHome = tool 'scanner';
+    withSonarQubeEnv() {
+      sh "${scannerHome}/bin/sonar-scanner"
     }
+  }
 }
